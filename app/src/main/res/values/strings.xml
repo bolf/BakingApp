@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Baking Time</string>
+    <string name="getingAllRecipesExceptionTag">getingAllRecipesExceptionTag</string>
 </resources>
