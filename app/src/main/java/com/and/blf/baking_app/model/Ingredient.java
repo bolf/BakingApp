@@ -1,37 +1,37 @@
 package com.and.blf.baking_app.model;
 
 class Ingredient {
-    private int mQuantity;
-    private String mMeasure;
-    private String mIngredient;
+    private float quantity;
+    private String measure;
+    private String ingredient;
 
     public Ingredient(int quantity, String measure, String ingredient) {
-        mQuantity = quantity;
-        mMeasure = measure;
-        mIngredient = ingredient;
+        this.quantity = quantity;
+        this.measure = measure;
+        this.ingredient = ingredient;
     }
 
-    public int getQuantity() {
-        return mQuantity;
+    public float getQuantity() {
+        return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        mQuantity = quantity;
+    public void setQuantity(float quantity) {
+        this.quantity = quantity;
     }
 
     public String getMeasure() {
-        return mMeasure;
+        return measure;
     }
 
     public void setMeasure(String measure) {
-        mMeasure = measure;
+        this.measure = measure;
     }
 
     public String getIngredient() {
-        return mIngredient;
+        return ingredient;
     }
 
     public void setIngredient(String ingredient) {
-        mIngredient = ingredient;
+        this.ingredient = ingredient;
     }
 }

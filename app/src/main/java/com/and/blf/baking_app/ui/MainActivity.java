@@ -14,37 +14,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private RecipeRetrofitService mRecipeRetrofitService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecipeRetrofitService = RecipeRetrofitService.utils.getRecipeRetrofitService();
+
 
         loadRecipes();
     }
 
     private void loadRecipes(){
-        Call<Recipe[]> recipesArrayCall = mRecipeRetrofitService.getAllRecipes();
 
-        recipesArrayCall.enqueue(new Callback<Recipe[]>() {
-            @Override
-            public void onResponse(@NonNull Call<Recipe[]> call, @NonNull Response<Recipe[]> response) {
-                try {
-                    Recipe[] recipesArray = response.body();
-
-                }catch (NullPointerException e){
-                    Log.d(getString(R.string.getingAllRecipesExceptionTag), e.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull  Call<Recipe[]> call, @NonNull Throwable t) {
-                Log.d(getString(R.string.getingAllRecipesExceptionTag), t.getMessage());
-            }
-        });
     }
-
 }

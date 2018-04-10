@@ -1,57 +1,57 @@
 package com.and.blf.baking_app.model;
 
 class Step {
-    private long mId;
-    private String mSshortDescription;
-    private String mDescription;
-    private String mVideoURL;
-    private String mThumbnailURL;
+    private long id;
+    private String shortDescription;
+    private String description;
+    private String videoURL;
+    private String thumbnailURL;
 
     public Step(long id, String sshortDescription, String description, String videoURL, String thumbnailURL) {
-        mId = id;
-        mSshortDescription = sshortDescription;
-        mDescription = description;
-        mVideoURL = videoURL;
-        mThumbnailURL = thumbnailURL;
+        this.id = id;
+        shortDescription = sshortDescription;
+        this.description = description;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
     }
 
     public long getId() {
-        return mId;
+        return id;
     }
 
     public void setId(long id) {
-        mId = id;
+        this.id = id;
     }
 
-    public String getSshortDescription() {
-        return mSshortDescription;
+    public String getShortDescription() {
+        return shortDescription;
     }
 
-    public void setSshortDescription(String sshortDescription) {
-        mSshortDescription = sshortDescription;
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
     public String getDescription() {
-        return mDescription;
+        return description;
     }
 
     public void setDescription(String description) {
-        mDescription = description;
+        this.description = description;
     }
 
     public String getVideoURL() {
-        return mVideoURL;
+        return videoURL;
     }
 
     public void setVideoURL(String videoURL) {
-        mVideoURL = videoURL;
+        this.videoURL = videoURL;
     }
 
     public String getThumbnailURL() {
-        return mThumbnailURL;
+        return thumbnailURL;
     }
 
     public void setThumbnailURL(String thumbnailURL) {
-        mThumbnailURL = thumbnailURL;
+        this.thumbnailURL = thumbnailURL;
     }
 }
