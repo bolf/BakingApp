@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -32,7 +30,6 @@ import retrofit2.Response;
  * to handle interaction events.
  */
 public class MasterListFragment extends Fragment {
-
     //private OnFragmentInteractionListener mListener;
     private static final String TAG = "RecyclerViewFragment";
 
@@ -42,13 +39,11 @@ public class MasterListFragment extends Fragment {
     protected GridLayoutManager mGridLayoutManager;
 
     protected RecipeAdapter mRecipeAdapter = new RecipeAdapter(new ArrayList<Recipe>());
-    protected Recipe[] mRecipeSet;
 
 
     public MasterListFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,8 +67,7 @@ public class MasterListFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<Recipe[]> call, @NonNull Response<Recipe[]> response) {
                 try {
-                    Recipe[] mRecipeSet = response.body();
-
+                    mRecipeAdapter.setRecipeList(response.body());
                 }catch (NullPointerException e){
                     Log.d(getString(R.string.getingAllRecipesExceptionTag), e.getMessage());
                 }
@@ -93,10 +87,17 @@ public class MasterListFragment extends Fragment {
         rootView.setTag(TAG);
 
         mRecyclerView = rootView.findViewById(R.id.rv_main_list);
-        mGridLayoutManager = new GridLayoutManager(getActivity(),2);
+        mGridLayoutManager = new GridLayoutManager(getActivity(),getColumnCount());
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mRecipeAdapter);
 
         return rootView;
+    }
+
+    private int getColumnCount() {
+        //TODO implement counting amount of columns
+        return 1;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

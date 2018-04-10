@@ -1,8 +1,12 @@
 package com.and.blf.baking_app.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe {
+public class Recipe implements Parcelable {
     private long id;
     private String name;
     private String imageUrl;
@@ -66,4 +70,61 @@ public class Recipe {
     public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
+
+    protected Recipe(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        imageUrl = in.readString();
+        servings = in.readInt();
+        if (in.readByte() == 0x01) {
+            ingredients = new ArrayList<Ingredient>();
+            in.readList(ingredients, Ingredient.class.getClassLoader());
+        } else {
+            ingredients = null;
+        }
+        if (in.readByte() == 0x01) {
+            steps = new ArrayList<Step>();
+            in.readList(steps, Step.class.getClassLoader());
+        } else {
+            steps = null;
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(imageUrl);
+        dest.writeInt(servings);
+        if (ingredients == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(ingredients);
+        }
+        if (steps == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(steps);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
 }
