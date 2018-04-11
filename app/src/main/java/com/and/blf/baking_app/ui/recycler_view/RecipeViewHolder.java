@@ -6,15 +6,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.and.blf.baking_app.R;
+import com.and.blf.baking_app.ui.RecipeItemClickListener;
 
-public class RecipeViewHolder extends RecyclerView.ViewHolder {
+import java.lang.ref.WeakReference;
+
+public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     TextView mRecipeName;
     ImageView mRecipeImage;
+    private WeakReference<RecipeItemClickListener> mRecipeItemClickListener;
 
-    public RecipeViewHolder(View itemView) {
+    public RecipeViewHolder(View itemView, WeakReference<RecipeItemClickListener> recipeItemClickListener) {
         super(itemView);
         mRecipeImage = itemView.findViewById(R.id.recipe_img);
         mRecipeName  = itemView.findViewById(R.id.recipe_txt);
+        itemView.setOnClickListener(this);
+        mRecipeItemClickListener = recipeItemClickListener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        mRecipeItemClickListener.get().onRecipeItemClicked(getAdapterPosition());
     }
 }

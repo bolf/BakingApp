@@ -3,6 +3,7 @@ package com.and.blf.baking_app.ui;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,12 +13,14 @@ import android.view.ViewGroup;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
 import com.and.blf.baking_app.ui.recycler_view.RecipeAdapter;
 import com.and.blf.baking_app.utils.RecipeRetrofitService;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -26,11 +29,12 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MasterListFragment.OnFragmentInteractionListener} interface
+ * {@link MasterListFragment.RecipeClickListener} interface
  * to handle interaction events.
  */
-public class MasterListFragment extends Fragment {
-    //private OnFragmentInteractionListener mListener;
+public class MasterListFragment extends Fragment implements RecipeItemClickListener {
+    private RecipeClickListener mRecipeClickListener;
+
     private static final String TAG = "RecyclerViewFragment";
 
     private RecipeRetrofitService mRecipeRetrofitService;
@@ -38,8 +42,7 @@ public class MasterListFragment extends Fragment {
     protected RecyclerView mRecyclerView;
     protected GridLayoutManager mGridLayoutManager;
 
-    protected RecipeAdapter mRecipeAdapter = new RecipeAdapter(new ArrayList<Recipe>());
-
+    protected RecipeAdapter mRecipeAdapter = new RecipeAdapter(new ArrayList<Recipe>(),new WeakReference<RecipeItemClickListener>(this));
 
     public MasterListFragment() {
         // Required empty public constructor
@@ -110,18 +113,27 @@ public class MasterListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        if (context instanceof RecipeClickListener) {
+            mRecipeClickListener = (RecipeClickListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement RecipeClickListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
 //        mListener = null;
+    }
+
+    /**
+    * when recipe item is clicked in mRecyclerView
+    * */
+    @Override
+    public void onRecipeItemClicked(int position) {
+        Toast.makeText(getActivity(),String.valueOf(position),Toast.LENGTH_SHORT).show();
+        //TODO: implement getting the recipe and passing it to mainActivity for detail fragment
     }
 
     /**
@@ -134,8 +146,9 @@ public class MasterListFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface RecipeClickListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onRecipeClicked(Parcelable recipe);
     }
+
 }

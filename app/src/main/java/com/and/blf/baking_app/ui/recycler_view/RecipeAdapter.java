@@ -7,21 +7,25 @@ import android.view.ViewGroup;
 
 import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
+import com.and.blf.baking_app.ui.RecipeItemClickListener;
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder>{
     private List<Recipe> mRecipeList;
+    private WeakReference<RecipeItemClickListener> mRecipeItemClickListener;
 
-    public RecipeAdapter(List<Recipe> recipeList){
+    public RecipeAdapter(List<Recipe> recipeList, WeakReference<RecipeItemClickListener> recipeItemClickListener){
         mRecipeList = recipeList;
+        mRecipeItemClickListener = recipeItemClickListener;
     }
 
     @Override
     public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_list_item, parent, false);
-        return new RecipeViewHolder(layoutView);
+        return new RecipeViewHolder(layoutView, mRecipeItemClickListener);
     }
 
     @Override
