@@ -3,7 +3,7 @@ package com.and.blf.baking_app.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class Step implements Parcelable {
+public class Step implements Parcelable {
     private long id;
     private String shortDescription;
     private String description;

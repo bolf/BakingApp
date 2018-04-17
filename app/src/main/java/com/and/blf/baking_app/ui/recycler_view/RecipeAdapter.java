@@ -7,25 +7,24 @@ import android.view.ViewGroup;
 
 import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
-import com.and.blf.baking_app.ui.RecipeItemClickListener;
 
-import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder>{
     private List<Recipe> mRecipeList;
-    private WeakReference<RecipeItemClickListener> mRecipeItemClickListener;
 
-    public RecipeAdapter(List<Recipe> recipeList, WeakReference<RecipeItemClickListener> recipeItemClickListener){
+    public RecipeAdapter(List<Recipe> recipeList){
         mRecipeList = recipeList;
-        mRecipeItemClickListener = recipeItemClickListener;
+        //mRecipeItemClickListener = recipeItemClickListener;
     }
 
     @Override
     public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_list_item, parent, false);
-        return new RecipeViewHolder(layoutView, mRecipeItemClickListener);
+        layoutView.setTag(mRecipeList);
+        return new RecipeViewHolder(layoutView);
     }
 
     @Override
@@ -42,8 +41,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder>{
     }
 
     public void setRecipeList(Recipe[] recipeArray){
-        mRecipeList = Arrays.asList(recipeArray);
+        mRecipeList = new ArrayList<>(Arrays.asList(recipeArray));
         notifyDataSetChanged();
+    }
+
+    public Recipe getRecipeByIndex(int index){
+        return mRecipeList.get(index);
     }
 
 }
