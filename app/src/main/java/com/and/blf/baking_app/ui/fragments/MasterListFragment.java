@@ -1,8 +1,7 @@
-package com.and.blf.baking_app.ui;
+package com.and.blf.baking_app.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,17 +12,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
-import com.and.blf.baking_app.model.Step;
+import com.and.blf.baking_app.ui.RecipeHostActivity;
+import com.and.blf.baking_app.ui.StepClickListener;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MasterListFragment.StepClickListener} interface
- * to handle interaction events.
  */
 public class MasterListFragment extends Fragment {
 
@@ -89,20 +86,5 @@ public class MasterListFragment extends Fragment {
 //        mListener = null;
     }
 
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface StepClickListener {
-        // TODO: Update argument type and name
-        void onStepClicked(int stepIndex);
-    }
 
 }

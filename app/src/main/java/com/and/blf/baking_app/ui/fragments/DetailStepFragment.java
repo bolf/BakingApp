@@ -1,12 +1,14 @@
-package com.and.blf.baking_app.ui;
+package com.and.blf.baking_app.ui.fragments;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
+
 import com.and.blf.baking_app.R;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -20,7 +22,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 
-public class DetailStepActivity extends AppCompatActivity{
+public class DetailStepFragment extends Fragment{
 
     private SimpleExoPlayerView mPlayerView;
     private SimpleExoPlayer mExoPlayer;
@@ -29,27 +31,26 @@ public class DetailStepActivity extends AppCompatActivity{
     private boolean mPlayWhenReady = true;
     private Uri mVideoUri;
 
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_step);
-        ((TextView) findViewById(R.id.description_tv)).setText(getIntent().getExtras().getString("step_description"));
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_detail_step,container,false);
 
-        Toolbar myToolbar = findViewById(R.id.step_toolbar);
-        setSupportActionBar(myToolbar);
-
-        mPlayerView = findViewById(R.id.playerView);
-        mVideoUri = Uri.parse(getIntent().getExtras().getString("video_ulr"));
+        //((TextView)rootView.findViewById(R.id.description_tv)).setText(getIntent().getExtras().getString("step_description"));
+        //mVideoUri = Uri.parse(getIntent().getExtras().getString("video_ulr"));
+        mPlayerView = rootView.findViewById(R.id.playerView);
         initializePlayer(mVideoUri);
-
         mPlayerView.setPlayer(mExoPlayer);
+
+        return  rootView;
     }
 
     private void initializePlayer(Uri mediaUri) {
         if (mExoPlayer == null) {
 
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(
-                    new DefaultRenderersFactory(this),
+                    new DefaultRenderersFactory(getActivity()),
                     new DefaultTrackSelector(), new DefaultLoadControl());
 
             MediaSource mediaSource = buildMediaSource(mediaUri);
@@ -62,18 +63,18 @@ public class DetailStepActivity extends AppCompatActivity{
 
     private MediaSource buildMediaSource(Uri uri) {
         return new ExtractorMediaSource.Factory(
-                new DefaultHttpDataSourceFactory(Util.getUserAgent(this, getString(R.string.app_name)))).
+                new DefaultHttpDataSourceFactory(Util.getUserAgent(getActivity(), getString(R.string.app_name)))).
                 createMediaSource(uri);
     }
 
     @SuppressLint("InlinedApi")
     private void hideSystemUi() {
         mPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                //| View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                //| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                //| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
     @Override
