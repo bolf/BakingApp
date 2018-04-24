@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.and.blf.baking_app.R;
@@ -33,6 +34,9 @@ public class MainRecipeListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_recipe_list);
+
+        Toolbar myToolbar = findViewById(R.id.main_recipe_list_tool_bar);
+        setSupportActionBar(myToolbar);
 
         mRecipeRetrofitService = RecipeRetrofitService.utils.getRecipeRetrofitService();
 

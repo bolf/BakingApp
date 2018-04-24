@@ -1,19 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/two_pane_lin_layout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activity_recipe_host_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <fragment
-        android:layout_width="400dp"
-        android:layout_height="match_parent"
-        android:name="com.and.blf.baking_app.ui.fragments.MasterListFragment"/>
+        android:id="@+id/master_view_fragment"
+        android:name="com.and.blf.baking_app.ui.fragments.MasterListFragment"
+        android:layout_width="250dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_recipe_host_toolbar" />
+
     <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"/>
+        android:id="@+id/frame_divider"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/master_view_fragment"
+        app:layout_constraintTop_toBottomOf="@+id/activity_recipe_host_toolbar" />
+
     <fragment
         android:id="@+id/two_pane_steps_details"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:name="com.and.blf.baking_app.ui.fragments.DetailStepFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frame_divider"
+        app:layout_constraintTop_toBottomOf="@+id/activity_recipe_host_toolbar" />
 
 </android.support.constraint.ConstraintLayout>
