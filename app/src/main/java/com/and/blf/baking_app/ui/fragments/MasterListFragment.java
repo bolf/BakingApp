@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,6 @@ import com.and.blf.baking_app.model.Recipe;
 import com.and.blf.baking_app.ui.RecipeHostActivity;
 import com.and.blf.baking_app.ui.StepClickListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- */
 public class MasterListFragment extends Fragment {
 
     Recipe mRecipe;
@@ -86,5 +83,9 @@ public class MasterListFragment extends Fragment {
 //        mListener = null;
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mRecipe.getName());
+    }
 }

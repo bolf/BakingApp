@@ -23,6 +23,8 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
         //make transaction for inflating proper fragments
         setContentView(R.layout.activity_recipe_host);
 
+        mRecipe = getIntent().getExtras().getParcelable(MainRecipeListActivity.RECIPE_PARCELABLE_TAG);
+
         mTwoPane = (findViewById(R.id.frame_divider) != null);
 
         Toolbar myToolbar = findViewById(R.id.activity_recipe_host_toolbar);
@@ -30,6 +32,7 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle(mRecipe.getName());
 
         if (mTwoPane) {
 
@@ -42,7 +45,7 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
                     .add(R.id.recipe_host_frame_layout, masterListFragment)
                     .commit();
         }
-        mRecipe = getIntent().getExtras().getParcelable(MainRecipeListActivity.RECIPE_PARCELABLE_TAG);
+
     }
 
     @Override
@@ -55,13 +58,17 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
     public void onStepClicked(int stepIndex) {
         Bundle bundle = new Bundle();
         bundle.putString("step_description",mRecipe.getSteps().get(stepIndex).getDescription());
+        bundle.putInt("stepIndex",stepIndex);
         bundle.putString("video_ulr",mRecipe.getSteps().get(stepIndex).getVideoURL());
+
+        DetailStepFragment detailStepFragment = new DetailStepFragment();
+        detailStepFragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.recipe_host_frame_layout, new DetailStepFragment())
+                .replace(R.id.recipe_host_frame_layout, detailStepFragment)
                 .commit();
-
+        getSupportActionBar().setTitle(mRecipe.getSteps().get(stepIndex).getShortDescription());
 //        Intent intent = new Intent(this, DetailStepFragment.class);
 //        intent.putExtras(bundle);
 //        startActivity(intent);
