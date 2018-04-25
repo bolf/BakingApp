@@ -37,13 +37,22 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
     private final String BACK_BUTTON_TAG = "BACK_BUTTON_TAG";
     private final String NEXT_BUTTON_TAG = "NEXT_BUTTON_TAG";
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mCurrentStepIndx = bundle.getInt("stepIndex");
+        } else {
+            mCurrentStepIndx = 0;
+            switchStep();
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail_step,container,false);
-
-        mCurrentStepIndx = getArguments().getInt("stepIndex");
 
         Button b = rootView.findViewById(R.id.previous_step_button);
         b.setOnClickListener(this);

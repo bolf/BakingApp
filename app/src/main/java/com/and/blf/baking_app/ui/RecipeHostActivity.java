@@ -56,18 +56,22 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
 
     @Override
     public void onStepClicked(int stepIndex) {
-        Bundle bundle = new Bundle();
-        bundle.putString("step_description",mRecipe.getSteps().get(stepIndex).getDescription());
-        bundle.putInt("stepIndex",stepIndex);
-        bundle.putString("video_ulr",mRecipe.getSteps().get(stepIndex).getVideoURL());
+        if (mTwoPane) {
 
-        DetailStepFragment detailStepFragment = new DetailStepFragment();
-        detailStepFragment.setArguments(bundle);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("step_description", mRecipe.getSteps().get(stepIndex).getDescription());
+            bundle.putInt("stepIndex", stepIndex);
+            bundle.putString("video_ulr", mRecipe.getSteps().get(stepIndex).getVideoURL());
 
-        getSupportFragmentManager().beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.recipe_host_frame_layout, detailStepFragment)
-                .commit();
+            DetailStepFragment detailStepFragment = new DetailStepFragment();
+            detailStepFragment.setArguments(bundle);
+
+            getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.recipe_host_frame_layout, detailStepFragment)
+                    .commit();
+        }
         getSupportActionBar().setTitle(mRecipe.getSteps().get(stepIndex).getShortDescription());
 //        Intent intent = new Intent(this, DetailStepFragment.class);
 //        intent.putExtras(bundle);
