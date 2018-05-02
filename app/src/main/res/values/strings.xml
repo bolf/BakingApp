@@ -4,4 +4,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appwidget_text">Baking application</string>
+    <string name="add_widget">Add widget</string>
+    <string name="sharedPrefFileName">com.and.blf.baking_app.PREFERENCE_FILE</string>
+    <string name="favorite_racipe_shared_pref_name">favorite_racipe</string>
 </resources>
