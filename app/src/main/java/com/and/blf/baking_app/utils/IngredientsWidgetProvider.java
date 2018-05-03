@@ -3,32 +3,42 @@ package com.and.blf.baking_app.utils;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.and.blf.baking_app.R;
 
-/**
- * Implementation of App Widget functionality.
- */
 public class IngredientsWidgetProvider extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    void setList(RemoteViews rv, Context context, int appWidgetId) {
+        Intent adapter = new Intent(context, RecipeIngredientsListRemoteViewService.class);
+        adapter.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        rv.setRemoteAdapter(R.id.widgetLV, adapter);
+    }
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget_provider);
-        //views.setTextViewText(R.id.appwidget_text, widgetText);
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+    void setTV(RemoteViews rv, Context context) {
+        String recipeName = SharedPreferencesUtils.readFavoriteRecipeDetailsFromSharedPreferences(
+                context,
+                context.getString(R.string.sharedPrefFileName),
+                context.getString(R.string.favorite_recipe_name_shared_pref_name),
+                "");
+        if(! recipeName.isEmpty()){
+            recipeName = recipeName.concat(" ingredients:");
+        }else{
+            recipeName = "no favorite recipe found";
+        }
+        rv.setTextViewText(R.id.widgetNameTV,recipeName);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
+        RemoteViews rv = new RemoteViews(context.getPackageName(),
+                R.layout.ingredients_widget);
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            setList(rv, context, appWidgetId);
+            setTV(rv, context);
+            appWidgetManager.updateAppWidget(appWidgetId, rv);
         }
     }
 

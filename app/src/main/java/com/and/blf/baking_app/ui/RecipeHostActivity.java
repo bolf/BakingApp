@@ -1,8 +1,9 @@
 package com.and.blf.baking_app.ui;
 
-
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,8 +16,8 @@ import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
 import com.and.blf.baking_app.ui.fragments.DetailStepFragment;
 import com.and.blf.baking_app.ui.fragments.MasterListFragment;
+import com.and.blf.baking_app.utils.IngredientsWidgetProvider;
 import com.and.blf.baking_app.utils.SharedPreferencesUtils;
-import com.google.android.exoplayer2.text.TextOutput;
 
 public class RecipeHostActivity extends AppCompatActivity implements StepClickListener{
     Recipe mRecipe;
@@ -64,16 +65,42 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_favorite) {
-            SharedPreferencesUtils.writeToSharedPreferences(this, getString(R.string.favorite_racipe_shared_pref_name), getString(R.string.sharedPrefFileName), mRecipe.getId());
+            SharedPreferencesUtils.writeFavoriteRecipeDetailsToSharedPreferences(
+                    this,
+                    getString(R.string.sharedPrefFileName),
+                    getString(R.string.favorite_recipe_id_shared_pref_name),
+                    mRecipe.getId(),
+                    getString(R.string.favorite_recipe_ingredients_shared_pref_name),
+                    mRecipe.getIngredientsNamesSet(),
+                    getString(R.string.favorite_recipe_name_shared_pref_name),
+                    mRecipe.getName());
+
             setMenuFavoriteIcon(mRecipe.getId());
             Toast.makeText(this, mRecipe.getName().concat(" became favorite. It's ingredient list is shown in the widget."), Toast.LENGTH_LONG).show();
+
+            updateRecipeInWidget();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void updateRecipeInWidget() {
+        Intent intent = new Intent(this, IngredientsWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = AppWidgetManager.getInstance(getApplication()).
+                getAppWidgetIds(new ComponentName(getApplication(), IngredientsWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
+    }
+
     private void setMenuFavoriteIcon(long curRecipeId){
-        long favoriteRecipe = SharedPreferencesUtils.readFromSharedPreferences(this,getString(R.string.favorite_racipe_shared_pref_name),getString(R.string.sharedPrefFileName));
+        long favoriteRecipe = SharedPreferencesUtils.readFavoriteRecipeDetailsFromSharedPreferences(
+                this,
+                getString(R.string.sharedPrefFileName),
+                getString(R.string.favorite_recipe_id_shared_pref_name),
+                0);
+
         if (favoriteRecipe == curRecipeId) {
             mMenu.getItem(0).setIcon(R.drawable.ic_star_gold_24dp);
         } else {

@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Recipe implements Parcelable {
     private long id;
@@ -113,6 +115,14 @@ public class Recipe implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(steps);
         }
+    }
+
+    public Set<String> getIngredientsNamesSet(){
+        Set<String> nameSet = new HashSet<>();
+        for(Ingredient ingredient : ingredients){
+            nameSet.add(ingredient.getIngredient());
+        }
+        return nameSet;
     }
 
     @SuppressWarnings("unused")
