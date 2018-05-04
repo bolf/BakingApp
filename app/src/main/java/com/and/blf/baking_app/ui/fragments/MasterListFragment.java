@@ -1,6 +1,7 @@
 package com.and.blf.baking_app.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -12,19 +13,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
+import com.and.blf.baking_app.IngredientsListActivity;
 import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
+import com.and.blf.baking_app.ui.MainRecipeListActivity;
 import com.and.blf.baking_app.ui.RecipeHostActivity;
 import com.and.blf.baking_app.ui.StepClickListener;
 
 public class MasterListFragment extends Fragment {
-
     Recipe mRecipe;
-
-    ListView stepsListView;
+    ListView mStepsListView;
     ArrayAdapter<String>mStepArrayAdapter;
+    Button showIngredientsBtn;
 
     public MasterListFragment() {
         // Required empty public constructor
@@ -46,8 +49,17 @@ public class MasterListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mRecipe = ((RecipeHostActivity)getActivity()).getHostedRecipe();
-        stepsListView = getView().findViewById(R.id.steps_list);
+        mStepsListView = getView().findViewById(R.id.steps_list);
         populateStepList();
+        showIngredientsBtn = getActivity().findViewById(R.id.ingredients_button);
+        showIngredientsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), IngredientsListActivity.class);
+                intent.putExtra(MainRecipeListActivity.RECIPE_PARCELABLE_TAG,mRecipe);
+                startActivity(intent);
+            }
+        });
     }
 
     private void populateStepList() {
@@ -56,9 +68,9 @@ public class MasterListFragment extends Fragment {
             stepsDescriptions[i] = String.valueOf(i+1) + ". " + mRecipe.getSteps().get(i).getShortDescription();
         }
         mStepArrayAdapter = new ArrayAdapter<>(getContext(),R.layout.step_view,stepsDescriptions);
-        stepsListView.setAdapter(mStepArrayAdapter);
+        mStepsListView.setAdapter(mStepArrayAdapter);
 
-        stepsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mStepsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ((StepClickListener)getActivity()).onStepClicked(position);

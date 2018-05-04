@@ -33,9 +33,9 @@
 
         <service
             android:name=".utils.RecipeIngredientsListRemoteViewService"
-            android:permission="android.permission.BIND_REMOTEVIEWS">
+            android:permission="android.permission.BIND_REMOTEVIEWS"></service>
 
-        </service>
+        <activity android:name=".IngredientsListActivity"></activity>
     </application>
 
 </manifest>

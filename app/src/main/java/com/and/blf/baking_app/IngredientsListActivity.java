@@ -1,54 +1,55 @@
-package com.and.blf.baking_app.ui;
+package com.and.blf.baking_app;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
-import com.and.blf.baking_app.ui.fragments.DetailStepFragment;
-import com.and.blf.baking_app.ui.fragments.MasterListFragment;
+import com.and.blf.baking_app.ui.MainRecipeListActivity;
+import com.and.blf.baking_app.ui.StepClickListener;
 import com.and.blf.baking_app.utils.IngredientsWidgetProvider;
 import com.and.blf.baking_app.utils.SharedPreferencesUtils;
 
-public class RecipeHostActivity extends AppCompatActivity implements StepClickListener{
-    Recipe mRecipe;
-    boolean mTwoPane;
-    Menu mMenu;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+public class IngredientsListActivity extends AppCompatActivity {
+    private Recipe mRecipe;
+    ListView mStepsListView;
+    ArrayAdapter<String>mStepArrayAdapter;
+    Menu mMenu;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_host);
+        setContentView(R.layout.activity_ingredients_list);
 
         mRecipe = getIntent().getExtras().getParcelable(MainRecipeListActivity.RECIPE_PARCELABLE_TAG);
+        mStepsListView = findViewById(R.id.ingredients_LV);
 
-        mTwoPane = (findViewById(R.id.frame_divider) != null);
+        populateStepList();
 
-        Toolbar myToolbar = findViewById(R.id.activity_recipe_host_toolbar);
+        Toolbar myToolbar = findViewById(R.id.activity_ingredients_list_toolbar);
         setSupportActionBar(myToolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle(mRecipe.getName());
-
-        if (mTwoPane) {
-
-        } else {
-            MasterListFragment masterListFragment = new MasterListFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .add(R.id.recipe_host_frame_layout, masterListFragment)
-                    .commit();
-        }
+        getSupportActionBar().setTitle(mRecipe.getName().concat(" ingredients"));
     }
 
     @Override
@@ -62,8 +63,8 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_favorite: {
+        switch(item.getItemId()){
+            case R.id.action_favorite:{
                 SharedPreferencesUtils.writeFavoriteRecipeDetailsToSharedPreferences(
                         this,
                         getString(R.string.sharedPrefFileName),
@@ -80,6 +81,9 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
                 updateRecipeInWidget();
                 return true;
             }
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -107,38 +111,10 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
         }
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-
-    @Override
-    public void onStepClicked(int stepIndex) {
-        if (mTwoPane) {
-
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("step_description", mRecipe.getSteps().get(stepIndex).getDescription());
-            bundle.putInt("stepIndex", stepIndex);
-            bundle.putString("video_ulr", mRecipe.getSteps().get(stepIndex).getVideoURL());
-
-            DetailStepFragment detailStepFragment = new DetailStepFragment();
-            detailStepFragment.setArguments(bundle);
-
-            getSupportFragmentManager().beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.recipe_host_frame_layout, detailStepFragment)
-                    .commit();
-        }
-        getSupportActionBar().setTitle(mRecipe.getSteps().get(stepIndex).getShortDescription());
-//        Intent intent = new Intent(this, DetailStepFragment.class);
-//        intent.putExtras(bundle);
-//        startActivity(intent);
-//        Toast.makeText(this,String.valueOf(stepIndex),Toast.LENGTH_SHORT).show();
-    }
-
-    public Recipe getHostedRecipe() {
-        return mRecipe;
+    private void populateStepList() {
+        Set<String> ingredientsNamesSet = mRecipe.getIngredientsNamesSet();
+        String[] namesArray = ingredientsNamesSet.toArray(new String[ingredientsNamesSet.size()]);
+        mStepArrayAdapter = new ArrayAdapter<>(this,R.layout.step_view,namesArray);
+        mStepsListView.setAdapter(mStepArrayAdapter);
     }
 }

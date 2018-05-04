@@ -6,6 +6,5 @@
         android:id="@+id/action_favorite"
         android:icon="@drawable/ic_star_blue_24dp"
         android:title="favorite"
-        app:showAsAction="always|withText"
-        android:checkable="true"/>
+        app:showAsAction="always|withText" />
 </menu>
