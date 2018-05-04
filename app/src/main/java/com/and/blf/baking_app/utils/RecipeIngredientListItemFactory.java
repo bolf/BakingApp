@@ -8,6 +8,7 @@ import android.widget.RemoteViewsService.RemoteViewsFactory;
 
 import com.and.blf.baking_app.R;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class RecipeIngredientListItemFactory implements RemoteViewsFactory {
     }
 
     void updateIngredientsList(){
+        mIngredientsList.clear();
         mIngredientsList = SharedPreferencesUtils.readFavoriteRecipeDetailsFromSharedPreferences(
                 mContext,
                 mContext.getString(R.string.sharedPrefFileName),
@@ -32,7 +34,7 @@ public class RecipeIngredientListItemFactory implements RemoteViewsFactory {
 
     @Override
     public void onCreate() {
-        updateIngredientsList();
+        mIngredientsList = new ArrayList<>();
     }
 
     @Override
@@ -52,8 +54,7 @@ public class RecipeIngredientListItemFactory implements RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
-        RemoteViews rView = new RemoteViews(mContext.getPackageName(),
-                R.layout.widget_list_item);
+        RemoteViews rView = new RemoteViews(mContext.getPackageName(),R.layout.widget_list_item);
         rView.setTextViewText(R.id.tvItemText, mIngredientsList.get(position));
         return rView;
     }

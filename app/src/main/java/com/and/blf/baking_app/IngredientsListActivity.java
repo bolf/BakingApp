@@ -89,6 +89,11 @@ public class IngredientsListActivity extends AppCompatActivity {
     }
 
     private void updateRecipeInWidget() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int appWidgetIds[] = appWidgetManager.getAppWidgetIds(
+                new ComponentName(this, IngredientsWidgetProvider.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widgetLV);
+
         Intent intent = new Intent(this, IngredientsWidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int[] ids = AppWidgetManager.getInstance(getApplication()).

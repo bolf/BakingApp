@@ -39,7 +39,6 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
             setList(rv, context, appWidgetId);
             setTV(rv, context);
             appWidgetManager.updateAppWidget(appWidgetId, rv);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.widgetLV);
         }
     }
 
