@@ -7,13 +7,29 @@
     tools:context="com.and.blf.baking_app.ui.fragments.DetailStepFragment"
     tools:layout_editor_absoluteY="81dp">
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/playerView"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/main_media_frame"
+        android:layout_width="0dp"
         android:layout_height="400dp"
+        android:background="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/exoplayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/splash_screen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:src="@drawable/cupcake"/>
+
+    </FrameLayout>
 
 
     <TextView
@@ -27,7 +43,7 @@
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerView" />
+        app:layout_constraintTop_toBottomOf="@+id/main_media_frame" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout"

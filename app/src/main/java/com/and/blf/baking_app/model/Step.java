@@ -92,4 +92,31 @@ public class Step implements Parcelable {
             return new Step[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Step step = (Step) o;
+
+        if (id != step.id) return false;
+        if (shortDescription != null ? !shortDescription.equals(step.shortDescription) : step.shortDescription != null)
+            return false;
+        if (description != null ? !description.equals(step.description) : step.description != null)
+            return false;
+        if (videoURL != null ? !videoURL.equals(step.videoURL) : step.videoURL != null)
+            return false;
+        return thumbnailURL != null ? thumbnailURL.equals(step.thumbnailURL) : step.thumbnailURL == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (shortDescription != null ? shortDescription.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (videoURL != null ? videoURL.hashCode() : 0);
+        result = 31 * result + (thumbnailURL != null ? thumbnailURL.hashCode() : 0);
+        return result;
+    }
 }

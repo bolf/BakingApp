@@ -120,7 +120,12 @@ public class Recipe implements Parcelable {
     public Set<String> getIngredientsNamesSet(){
         Set<String> nameSet = new HashSet<>();
         for(Ingredient ingredient : ingredients){
-            nameSet.add(ingredient.getIngredient());
+            nameSet.add(ingredient.getIngredient()
+                    .concat(" [")
+                    .concat(String.valueOf(ingredient.getQuantity()))
+                    .concat(" - ")
+                    .concat(ingredient.getMeasure().toLowerCase())
+                    .concat("]"));
         }
         return nameSet;
     }

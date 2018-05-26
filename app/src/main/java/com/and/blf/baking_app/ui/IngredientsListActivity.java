@@ -1,4 +1,4 @@
-package com.and.blf.baking_app;
+package com.and.blf.baking_app.ui;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
 import com.and.blf.baking_app.ui.MainRecipeListActivity;
 import com.and.blf.baking_app.ui.StepClickListener;

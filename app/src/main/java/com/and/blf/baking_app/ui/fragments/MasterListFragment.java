@@ -1,6 +1,5 @@
 package com.and.blf.baking_app.ui.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -16,7 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.and.blf.baking_app.IngredientsListActivity;
+import com.and.blf.baking_app.ui.IngredientsListActivity;
 import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
 import com.and.blf.baking_app.ui.MainRecipeListActivity;
@@ -65,7 +64,7 @@ public class MasterListFragment extends Fragment {
     private void populateStepList() {
         String[] stepsDescriptions = new String[mRecipe.getSteps().size()];
         for(int i = 0; i < mRecipe.getSteps().size(); i++){
-            stepsDescriptions[i] = String.valueOf(i+1) + ". " + mRecipe.getSteps().get(i).getShortDescription();
+            stepsDescriptions[i] = mRecipe.getSteps().get(i).getShortDescription();
         }
         mStepArrayAdapter = new ArrayAdapter<>(getContext(),R.layout.step_view,stepsDescriptions);
         mStepsListView.setAdapter(mStepArrayAdapter);
@@ -76,23 +75,6 @@ public class MasterListFragment extends Fragment {
                 ((StepClickListener)getActivity()).onStepClicked(position);
             }
         });
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof RecipeClickListener) {
-//            mRecipeClickListener = (RecipeClickListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement RecipeClickListener");
-//        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-//        mListener = null;
     }
 
     @Override

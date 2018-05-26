@@ -19,7 +19,7 @@ public interface RecipeRetrofitService {
     Call<Recipe[]> getAllRecipes();
 
     //static class for obtaining RetrofitService instance
-    public static class utils{
+    class utils{
         static final String RECIPE_URL = "https://d17h27t6h515a5.cloudfront.net/";
 
         public static RecipeRetrofitService getRecipeRetrofitService(){

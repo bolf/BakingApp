@@ -3,6 +3,7 @@ package com.and.blf.baking_app.ui;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,20 +15,27 @@ import android.widget.Toast;
 
 import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
+import com.and.blf.baking_app.model.Step;
 import com.and.blf.baking_app.ui.fragments.DetailStepFragment;
 import com.and.blf.baking_app.ui.fragments.MasterListFragment;
 import com.and.blf.baking_app.utils.IngredientsWidgetProvider;
 import com.and.blf.baking_app.utils.SharedPreferencesUtils;
 
 public class RecipeHostActivity extends AppCompatActivity implements StepClickListener{
-    Recipe mRecipe;
+    public Recipe mRecipe;
     boolean mTwoPane;
     Menu mMenu;
+    public Step mCurrStep;
+    private StepClickListener mDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_host);
+
+        if (savedInstanceState != null) {
+            mCurrStep = savedInstanceState.getParcelable("mCurrStep");
+        }
 
         mRecipe = getIntent().getExtras().getParcelable(MainRecipeListActivity.RECIPE_PARCELABLE_TAG);
 
@@ -43,12 +51,19 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
         if (mTwoPane) {
 
         } else {
-            MasterListFragment masterListFragment = new MasterListFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .add(R.id.recipe_host_frame_layout, masterListFragment)
-                    .commit();
+            if (mCurrStep == null) {
+                MasterListFragment masterListFragment = new MasterListFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .add(R.id.recipe_host_frame_layout, masterListFragment)
+                        .commit();}
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("mCurrStep",mCurrStep);
     }
 
     @Override
@@ -75,7 +90,7 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
                         mRecipe.getName());
 
                 setMenuFavoriteIcon(mRecipe.getId());
-                Toast.makeText(this, mRecipe.getName().concat(" became favorite. It's ingredient list is shown in the widget."), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, mRecipe.getName().concat(" became favorite. It's ingredient list will be shown in the widget."), Toast.LENGTH_LONG).show();
 
                 updateRecipeInWidget();
                 return true;
@@ -120,13 +135,15 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
 
     @Override
     public void onStepClicked(int stepIndex) {
+        mCurrStep = mRecipe.getSteps().get(stepIndex);
         if (mTwoPane) {
-
+            mDetailFragment.onStepClicked(stepIndex);
         } else {
             Bundle bundle = new Bundle();
-            bundle.putString("step_description", mRecipe.getSteps().get(stepIndex).getDescription());
+            bundle.putString("step_description", mCurrStep.getDescription());
             bundle.putInt("stepIndex", stepIndex);
-            bundle.putString("video_ulr", mRecipe.getSteps().get(stepIndex).getVideoURL());
+            bundle.putString("video_ulr", mCurrStep.getVideoURL());
+            bundle.putInt("maxStepNum", mRecipe.getSteps().size());
 
             DetailStepFragment detailStepFragment = new DetailStepFragment();
             detailStepFragment.setArguments(bundle);
@@ -137,13 +154,13 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
                     .commit();
         }
         getSupportActionBar().setTitle(mRecipe.getSteps().get(stepIndex).getShortDescription());
-//        Intent intent = new Intent(this, DetailStepFragment.class);
-//        intent.putExtras(bundle);
-//        startActivity(intent);
-//        Toast.makeText(this,String.valueOf(stepIndex),Toast.LENGTH_SHORT).show();
     }
 
     public Recipe getHostedRecipe() {
         return mRecipe;
+    }
+
+    public void set_mDetailfargment(StepClickListener mDetailFragment){
+        this.mDetailFragment = mDetailFragment;
     }
 }
