@@ -2,31 +2,22 @@ package com.and.blf.baking_app.ui;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
-import com.and.blf.baking_app.ui.MainRecipeListActivity;
-import com.and.blf.baking_app.ui.StepClickListener;
 import com.and.blf.baking_app.utils.IngredientsWidgetProvider;
 import com.and.blf.baking_app.utils.SharedPreferencesUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class IngredientsListActivity extends AppCompatActivity {
@@ -77,7 +68,7 @@ public class IngredientsListActivity extends AppCompatActivity {
                         mRecipe.getName());
 
                 setMenuFavoriteIcon(mRecipe.getId());
-                Toast.makeText(this, mRecipe.getName().concat(" became favorite. It's ingredient list is shown in the widget."), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, mRecipe.getName().concat(getString(R.string.ingr_will_be_shown_in_widget)), Toast.LENGTH_LONG).show();
 
                 updateRecipeInWidget();
                 return true;

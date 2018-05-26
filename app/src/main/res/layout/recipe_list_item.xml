@@ -21,8 +21,8 @@
             android:id="@+id/recipe_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Baking title"/>
-
+            android:padding="8dp"
+            android:textAlignment="center"/>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

@@ -3,10 +3,9 @@ package com.and.blf.baking_app.ui;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +23,7 @@ import com.and.blf.baking_app.utils.SharedPreferencesUtils;
 public class RecipeHostActivity extends AppCompatActivity implements StepClickListener{
     public Recipe mRecipe;
     boolean mTwoPane;
-    Menu mMenu;
+    private Menu mMenu;
     public Step mCurrStep;
     private StepClickListener mDetailFragment;
 
@@ -34,7 +33,7 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
         setContentView(R.layout.activity_recipe_host);
 
         if (savedInstanceState != null) {
-            mCurrStep = savedInstanceState.getParcelable("mCurrStep");
+            mCurrStep = savedInstanceState.getParcelable(getString(R.string.mCurrStep_tag));
         }
 
         mRecipe = getIntent().getExtras().getParcelable(MainRecipeListActivity.RECIPE_PARCELABLE_TAG);
@@ -63,7 +62,7 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("mCurrStep",mCurrStep);
+        outState.putParcelable(getString(R.string.mCurrStep_tag),mCurrStep);
     }
 
     @Override
@@ -90,7 +89,7 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
                         mRecipe.getName());
 
                 setMenuFavoriteIcon(mRecipe.getId());
-                Toast.makeText(this, mRecipe.getName().concat(" became favorite. It's ingredient list will be shown in the widget."), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, mRecipe.getName().concat(getString(R.string.ingr_will_be_shown_in_widget)), Toast.LENGTH_LONG).show();
 
                 updateRecipeInWidget();
                 return true;
@@ -140,10 +139,10 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
             mDetailFragment.onStepClicked(stepIndex);
         } else {
             Bundle bundle = new Bundle();
-            bundle.putString("step_description", mCurrStep.getDescription());
-            bundle.putInt("stepIndex", stepIndex);
-            bundle.putString("video_ulr", mCurrStep.getVideoURL());
-            bundle.putInt("maxStepNum", mRecipe.getSteps().size());
+            bundle.putString(getString(R.string.step_description_tag), mCurrStep.getDescription());
+            bundle.putInt(getString(R.string.stepIndex_tag), stepIndex);
+            bundle.putString(getString(R.string.video_ulr_tag), mCurrStep.getVideoURL());
+            bundle.putInt(getString(R.string.maxStepNum_tag), mRecipe.getSteps().size());
 
             DetailStepFragment detailStepFragment = new DetailStepFragment();
             detailStepFragment.setArguments(bundle);

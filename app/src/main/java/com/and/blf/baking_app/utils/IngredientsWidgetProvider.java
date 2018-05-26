@@ -25,7 +25,7 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
         if(! recipeName.isEmpty()){
             recipeName = recipeName.concat(" ingredients:");
         }else{
-            recipeName = "no favorite recipe found";
+            recipeName = context.getString(R.string.no_favorite_recipe_found);
         }
         rv.setTextViewText(R.id.widgetNameTV,recipeName);
     }

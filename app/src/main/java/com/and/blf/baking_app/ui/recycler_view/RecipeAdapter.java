@@ -10,7 +10,6 @@ import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
 import com.squareup.picasso.Picasso;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +19,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder>{
 
     public RecipeAdapter(List<Recipe> recipeList){
         mRecipeList = recipeList;
-        //mRecipeItemClickListener = recipeItemClickListener;
     }
 
     @Override
@@ -52,9 +50,4 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder>{
         mRecipeList = new ArrayList<>(Arrays.asList(recipeArray));
         notifyDataSetChanged();
     }
-
-    public Recipe getRecipeByIndex(int index){
-        return mRecipeList.get(index);
-    }
-
 }

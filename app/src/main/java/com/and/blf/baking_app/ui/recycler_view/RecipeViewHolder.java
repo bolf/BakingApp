@@ -27,7 +27,6 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.On
 
     @Override
     public void onClick(View v) {
-        //getAdapterPosition();
         Intent intent = new Intent(v.getContext(), RecipeHostActivity.class);
         intent.putExtra(MainRecipeListActivity.RECIPE_PARCELABLE_TAG, ((ArrayList<Recipe>)itemView.getTag()).get(getAdapterPosition()));
         v.getContext().startActivity(intent);

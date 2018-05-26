@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Step;
 import com.and.blf.baking_app.ui.RecipeHostActivity;
@@ -48,7 +47,6 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
     private SimpleExoPlayerView mExoPlayerView;
     private MediaSource mVideoSource;
     private boolean mExoPlayerFullscreen = false;
-    private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
     private Dialog mFullScreenDialog;
 
@@ -62,8 +60,6 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
 
     private TextView descriptionTV;
     private int maxStepNum;
-
-    private boolean mTwoPane;
 
     @Nullable
     @Override
@@ -91,8 +87,8 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
             mExoPlayerFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN);
         }
 
-        mTwoPane = (getActivity().findViewById(R.id.frame_divider) != null);
-        if (mTwoPane) {
+        boolean twoPane = (getActivity().findViewById(R.id.frame_divider) != null);
+        if (twoPane) {
             Step curStep = ((RecipeHostActivity)getActivity()).mCurrStep;
             if(curStep == null){
                 curStep = ((RecipeHostActivity)getActivity()).mRecipe.getSteps().get(0);
@@ -104,16 +100,15 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
 
         } else {
             if (savedInstanceState != null) {
-                mStringUri = savedInstanceState.getString("mStringUri");
-                mCurrentStepIndx = savedInstanceState.getInt("stepIndex");
-                maxStepNum = savedInstanceState.getInt("maxStepNum");
-                descriptionTV.setText(savedInstanceState.getString("descriptionTV"));
+                mStringUri = savedInstanceState.getString(getString(R.string.mStringUri_tag));
+                mCurrentStepIndx = savedInstanceState.getInt(getString(R.string.stepIndex_tag));
+                maxStepNum = savedInstanceState.getInt(getString(R.string.maxStepNum_tag));
+                descriptionTV.setText(savedInstanceState.getString(getString(R.string.descriptionTV_tag)));
             } else {
-                maxStepNum = (int) getArguments().get("maxStepNum");
-                mStringUri = (String) getArguments().get("video_ulr");
-                mCurrentStepIndx = getArguments().getInt("stepIndex");
-                maxStepNum = getArguments().getInt("maxStepNum");
-                descriptionTV.setText((String) getArguments().get("step_description"));
+                maxStepNum = getArguments().getInt(getString(R.string.maxStepNum_tag));
+                mStringUri = (String) getArguments().get(getString(R.string.video_ulr_tag));
+                mCurrentStepIndx = getArguments().getInt(getString(R.string.stepIndex_tag));
+                descriptionTV.setText((String) getArguments().get(getString(R.string.step_description_tag)));
             }
         }
 
@@ -133,10 +128,10 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
         outState.putLong(STATE_RESUME_POSITION, mResumePosition);
         outState.putBoolean(STATE_PLAYER_FULLSCREEN, mExoPlayerFullscreen);
 
-        outState.putInt("stepIndex",mCurrentStepIndx);
-        outState.putInt("maxStepNum",maxStepNum);
-        outState.putString("mStringUri",mStringUri);
-        outState.putString("descriptionTV",descriptionTV.getText().toString());
+        outState.putInt(getString(R.string.stepIndex_tag),mCurrentStepIndx);
+        outState.putInt(getString(R.string.maxStepNum_tag),maxStepNum);
+        outState.putString(getString(R.string.mStringUri_tag),mStringUri);
+        outState.putString(getString(R.string.descriptionTV_tag),descriptionTV.getText().toString());
 
         super.onSaveInstanceState(outState);
     }
@@ -170,8 +165,8 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
     private void initFullscreenButton() {
         PlaybackControlView controlView = mExoPlayerView.findViewById(R.id.exo_controller);
         mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
-        mFullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
-        mFullScreenButton.setOnClickListener(new View.OnClickListener() {
+        FrameLayout fullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
+        fullScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mExoPlayerFullscreen)
@@ -260,12 +255,12 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
             if (mCurrentStepIndx < maxStepNum-1) {
                 mCurrentStepIndx++;
                 switchStep();
-            }else Toast.makeText(getActivity(),"max step number is reached",Toast.LENGTH_SHORT).show();
+            }else Toast.makeText(getActivity(), R.string.max_step_is_reached_info,Toast.LENGTH_SHORT).show();
         } else if (tag.equals(BACK_BUTTON_TAG)) {
             if (mCurrentStepIndx > 0) {
                 mCurrentStepIndx--;
                 switchStep();
-            }else Toast.makeText(getActivity(),"min step number is reached",Toast.LENGTH_SHORT).show();
+            }else Toast.makeText(getActivity(), R.string.mix_step_is_reached_info,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -295,5 +290,3 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
         switchStep();
     }
 }
-
-//добавить тесты

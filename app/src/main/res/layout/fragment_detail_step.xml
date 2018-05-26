@@ -39,7 +39,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:drawableLeft="@drawable/ic_arrow_back_black_24dp"
-            android:text="Previous step"
+            android:text="@string/previous_step"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/next_step_button"
             app:layout_constraintStart_toStartOf="parent" />
@@ -72,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:drawableRight="@drawable/ic_arrow_forward_black_24dp"
-            android:text="Next step"
+            android:text="@string/next_step"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/previous_step_button" />

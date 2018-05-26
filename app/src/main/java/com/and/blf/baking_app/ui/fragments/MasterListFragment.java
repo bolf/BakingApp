@@ -23,10 +23,8 @@ import com.and.blf.baking_app.ui.RecipeHostActivity;
 import com.and.blf.baking_app.ui.StepClickListener;
 
 public class MasterListFragment extends Fragment {
-    Recipe mRecipe;
-    ListView mStepsListView;
-    ArrayAdapter<String>mStepArrayAdapter;
-    Button showIngredientsBtn;
+    private Recipe mRecipe;
+    private ListView mStepsListView;
 
     public MasterListFragment() {
         // Required empty public constructor
@@ -39,7 +37,6 @@ public class MasterListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
         return rootView;
     }
@@ -50,7 +47,7 @@ public class MasterListFragment extends Fragment {
         mRecipe = ((RecipeHostActivity)getActivity()).getHostedRecipe();
         mStepsListView = getView().findViewById(R.id.steps_list);
         populateStepList();
-        showIngredientsBtn = getActivity().findViewById(R.id.ingredients_button);
+        Button showIngredientsBtn = getActivity().findViewById(R.id.ingredients_button);
         showIngredientsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,8 +63,8 @@ public class MasterListFragment extends Fragment {
         for(int i = 0; i < mRecipe.getSteps().size(); i++){
             stepsDescriptions[i] = mRecipe.getSteps().get(i).getShortDescription();
         }
-        mStepArrayAdapter = new ArrayAdapter<>(getContext(),R.layout.step_view,stepsDescriptions);
-        mStepsListView.setAdapter(mStepArrayAdapter);
+        ArrayAdapter<String> stepArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.step_view, stepsDescriptions);
+        mStepsListView.setAdapter(stepArrayAdapter);
 
         mStepsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

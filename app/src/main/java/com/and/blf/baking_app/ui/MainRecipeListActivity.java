@@ -1,12 +1,17 @@
 package com.and.blf.baking_app.ui;
 
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.Toast;
 
 import com.and.blf.baking_app.R;
 import com.and.blf.baking_app.model.Recipe;
@@ -41,7 +46,7 @@ public class MainRecipeListActivity extends AppCompatActivity {
         mRecipeRetrofitService = RecipeRetrofitService.utils.getRecipeRetrofitService();
 
         mRecyclerView = findViewById(R.id.rv_main_list);
-        mGridLayoutManager = new GridLayoutManager(this,getGridLayoutColumnCount());
+        mGridLayoutManager = new GridLayoutManager(this, getGridLayoutColumnCount());
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mRecipeAdapter);
@@ -50,14 +55,23 @@ public class MainRecipeListActivity extends AppCompatActivity {
     }
 
     private int getGridLayoutColumnCount() {
-        //TODO implement counting amount of columns
-        return 1;
+
+        int cardViewWidth = 166; //150 + 16
+        Resources r = getResources();
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, cardViewWidth, r.getDisplayMetrics());
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        return metrics.widthPixels / px;
     }
 
     private void loadRecipes() {
-        if(! RecipeRetrofitService.utils.networkIsAvailable(this)){
+        if (!RecipeRetrofitService.utils.networkIsAvailable(this)) {
             //set visibility of the indicator
             //show toast "net is not available"
+            Toast.makeText(this, R.string.network_is_down_toast_text, Toast.LENGTH_SHORT).show();
+            findViewById(R.id.main_recipe_list_pb).setVisibility(View.VISIBLE);
             return;
         }
 
@@ -68,13 +82,14 @@ public class MainRecipeListActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<Recipe[]> call, @NonNull Response<Recipe[]> response) {
                 try {
                     mRecipeAdapter.setRecipeList(response.body());
-                }catch (NullPointerException e){
+                    findViewById(R.id.main_recipe_list_pb).setVisibility(View.GONE);
+                } catch (NullPointerException e) {
                     Log.d(getString(R.string.getingAllRecipesExceptionTag), e.getMessage());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull  Call<Recipe[]> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Recipe[]> call, @NonNull Throwable t) {
                 Log.d(getString(R.string.getingAllRecipesExceptionTag), t.getMessage());
             }
         });
