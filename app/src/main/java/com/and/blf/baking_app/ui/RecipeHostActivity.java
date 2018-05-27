@@ -54,7 +54,8 @@ public class RecipeHostActivity extends AppCompatActivity implements StepClickLi
                 MasterListFragment masterListFragment = new MasterListFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .add(R.id.recipe_host_frame_layout, masterListFragment)
+                        .replace(R.id.recipe_host_frame_layout, masterListFragment)
+                        //.add(R.id.recipe_host_frame_layout, masterListFragment)
                         .commit();}
         }
     }

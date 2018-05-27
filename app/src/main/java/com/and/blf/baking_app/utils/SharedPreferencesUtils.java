@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class SharedPreferencesUtils {
+public final class SharedPreferencesUtils {
+    private SharedPreferencesUtils() {}
+
     public static void writeFavoriteRecipeDetailsToSharedPreferences(Context context, String shPrefName,
                                                                      String prefIdName, long recipeId,
                                                                      String prefSetName, Set<String> ingredientsSet,
