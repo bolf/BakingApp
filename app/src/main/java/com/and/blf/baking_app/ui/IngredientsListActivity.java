@@ -111,7 +111,7 @@ public class IngredientsListActivity extends AppCompatActivity {
     private void populateStepList() {
         Set<String> ingredientsNamesSet = mRecipe.getIngredientsNamesSet();
         String[] namesArray = ingredientsNamesSet.toArray(new String[ingredientsNamesSet.size()]);
-        mStepArrayAdapter = new ArrayAdapter<>(this,R.layout.step_view,namesArray);
+        mStepArrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,namesArray);
         mStepsListView.setAdapter(mStepArrayAdapter);
     }
 }

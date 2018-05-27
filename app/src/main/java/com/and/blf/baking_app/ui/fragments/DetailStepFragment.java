@@ -24,6 +24,7 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -44,6 +45,7 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
     private final String STATE_RESUME_WINDOW = "resumeWindow";
     private final String STATE_RESUME_POSITION = "resumePosition";
     private final String STATE_PLAYER_FULLSCREEN = "playerFullscreen";
+    private final String STATE_PLAYER_PAUSED = "playerIsPaused";
     private SimpleExoPlayerView mExoPlayerView;
     private MediaSource mVideoSource;
     private boolean mExoPlayerFullscreen = false;
@@ -60,6 +62,7 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
 
     private TextView descriptionTV;
     private int maxStepNum;
+    private boolean mPlaybackIsPaused;
 
     @Nullable
     @Override
@@ -85,6 +88,7 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
             mResumeWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW);
             mResumePosition = savedInstanceState.getLong(STATE_RESUME_POSITION);
             mExoPlayerFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN);
+            mPlaybackIsPaused = savedInstanceState.getBoolean(STATE_PLAYER_PAUSED);
         }
 
         boolean twoPane = (getActivity().findViewById(R.id.frame_divider) != null);
@@ -127,6 +131,7 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
         outState.putInt(STATE_RESUME_WINDOW, mResumeWindow);
         outState.putLong(STATE_RESUME_POSITION, mResumePosition);
         outState.putBoolean(STATE_PLAYER_FULLSCREEN, mExoPlayerFullscreen);
+        outState.putBoolean(STATE_PLAYER_PAUSED, mPlaybackIsPaused);
 
         outState.putInt(getString(R.string.stepIndex_tag),mCurrentStepIndx);
         outState.putInt(getString(R.string.maxStepNum_tag),maxStepNum);
@@ -183,6 +188,26 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         LoadControl loadControl = new DefaultLoadControl();
         SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(getActivity()), trackSelector, loadControl);
+
+        player.addListener(new Player.DefaultEventListener() {
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                if (playWhenReady && playbackState == Player.STATE_READY) {
+                    // media actually playing
+                    //Toast.makeText(getContext(),"plays",Toast.LENGTH_SHORT).show();
+                    mPlaybackIsPaused = false;
+                } else if (playWhenReady) {
+                    // might be idle (plays after prepare()),
+                    // buffering (plays when data available)
+                    // or ended (plays when seek away from end)
+                } else {
+                    // player paused in any state
+                    mPlaybackIsPaused = true;
+                    //Toast.makeText(getContext(),"paused",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         mExoPlayerView.setPlayer(player);
 
         boolean haveResumePosition = mResumeWindow != C.INDEX_UNSET;
@@ -194,20 +219,20 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
         mExoPlayerView.setControllerShowTimeoutMs(0);
         mExoPlayerView.setControllerHideOnTouch(false);
         mExoPlayerView.getPlayer().prepare(mVideoSource);
-        mExoPlayerView.getPlayer().setPlayWhenReady(true);
+        mExoPlayerView.getPlayer().setPlayWhenReady(!mPlaybackIsPaused);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        if (mExoPlayerView == null) {
+        //if (mExoPlayerView == null) {
             mExoPlayerView = getActivity().findViewById(R.id.exoplayer);
             initFullscreenDialog();
             initFullscreenButton();
             mVideoSource = buildMediaSource();
             initExoPlayer();
-        }
+        //}
 
         int newConfig = getResources().getConfiguration().orientation;
         if (newConfig == Configuration.ORIENTATION_LANDSCAPE) {
@@ -285,7 +310,6 @@ public class DetailStepFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onStepClicked(int stepIndex) {
-
         mCurrentStepIndx = stepIndex;
         switchStep();
     }
